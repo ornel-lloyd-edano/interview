@@ -1,8 +1,8 @@
 package forex.programs.rates
 
 import forex.domain.Rate
-import errors._
+import forex.programs.Error
 
 trait Algebra[F[_]] {
-  def get(request: Protocol.GetRatesRequest): F[Error Either Rate]
+  def get(request: Protocol.GetRatesRequests): F[Error Either List[Rate]]
 }

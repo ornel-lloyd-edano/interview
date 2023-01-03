@@ -15,4 +15,8 @@ object Converters {
       )
   }
 
+  private[rates] implicit class GetApiResponsesOps(val rates: Seq[Rate]) extends AnyVal {
+    def asGetApiResponse: Seq[GetApiResponse] = rates.map(_.asGetApiResponse)
+  }
+
 }
