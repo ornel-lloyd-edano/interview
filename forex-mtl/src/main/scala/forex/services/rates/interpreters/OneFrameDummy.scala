@@ -1,15 +1,15 @@
 package forex.services.rates.interpreters
 
-import forex.services.rates.Algebra
 import cats.Applicative
-import cats.syntax.applicative._
-import cats.syntax.either._
-import forex.domain.{ Price, Rate, Timestamp }
-import forex.services.rates.errors._
+import cats.implicits.{catsSyntaxApplicativeId, catsSyntaxEitherId}
+import forex.domain.{Price, Rate, Timestamp}
+import forex.services.Error
+import forex.services.rates.Algebra
 
-class OneFrameDummy[F[_]: Applicative] extends Algebra[F] {
+import java.time.Clock
 
-  override def get(pair: Rate.Pair): F[Error Either Rate] =
-    Rate(pair, Price(BigDecimal(100)), Timestamp.now).asRight[Error].pure[F]
-
+class OneFrameDummy[F[_]: Applicative](clock: Clock) extends Algebra[F] {
+  override def get(exchangePair: Seq[Rate.Pair]): F[Error Either List[Rate]] = {
+    exchangePair.toList.map(p=> Rate(p, Price(100.0), Timestamp.now(clock) )).asRight[Error].pure[F]
+  }
 }
